@@ -2,7 +2,7 @@
 import Head from "next/head";
 import { useRouter } from "next/navigation";
 export default function Home() {
-  const rotuer = useRouter()
+  const router = useRouter()
   return (
     <>
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex flex-col items-center justify-center p-4">
@@ -33,12 +33,12 @@ export default function Home() {
               <button
                 className="px-6 py-3 rounded-full bg-indigo-600 text-white font-medium
                             transition-all hover:bg-indigo-700 hover:shadow-lg hover:-translate-y-0.5"
-                onClick={() => rotuer.push("/login")}
+                onClick={() => router.push("/login")}
               >
                 Login
               </button>
               <button
-                onClick={() => rotuer.push("/register")}
+                onClick={() => router.push("/register")}
                 className="px-6 py-3 rounded-full bg-white text-indigo-600 border-2 border-indigo-600
                             font-medium transition-all hover:bg-indigo-50 hover:shadow-lg hover:-translate-y-0.5"
               >
