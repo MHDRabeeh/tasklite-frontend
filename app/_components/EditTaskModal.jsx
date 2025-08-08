@@ -1,54 +1,58 @@
-"use client"
-import React, { useState } from 'react';
-import { FiX, FiCalendar, FiPlus } from 'react-icons/fi';
+"use client";
+import React, { useEffect, useState } from "react";
+import { FiX, FiCalendar, FiEdit3 } from "react-icons/fi";
 
-const AddTaskModal = ({ isOpen, onClose, onAddTask }) => {
+const EditTaskModal = ({ isOpen, onClose, onUpdateTask, task }) => {
   const [taskData, setTaskData] = useState({
     title: '',
     description: '',
     status: 'Pending',
     priority: 'Medium',
-    dueDate: new Date().toISOString().split('T')[0] // Default to today
+    dueDate: new Date().toISOString().split('T')[0],
   });
 
+  // Populate state when task is provided
+  useEffect(() => {
+    if (task) {
+      setTaskData({
+        title: task.title || '',
+        description: task.description || '',
+        status: task.status || 'Pending',
+        priority: task.priority || 'Medium',
+        dueDate: task.dueDate ? task.dueDate.split('T')[0] : new Date().toISOString().split('T')[0],
+      });
+    }
+  }, [task]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setTaskData(prev => ({ ...prev, [name]: value }));
+    setTaskData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = (e) => {
-    const userId = localStorage.getItem('userId');
     e.preventDefault();
-    const newTask = {
+    const updatedTask = {
       ...taskData,
-      userId: userId,
-
+      userId: task?.userId || localStorage.getItem('userId'),
     };
-    onAddTask(newTask);
+    onUpdateTask(task._id, updatedTask);
     onClose();
-    setTaskData({
-      title: '',
-      description: '',
-      status: 'Pending',
-      priority: 'Medium',
-      dueDate: new Date().toISOString().split('T')[0] // Default to today
-    })
   };
 
-  if (!isOpen) return null;
+  if (!isOpen || !task) return null;
 
   return (
     <div className="fixed inset-0 bg-black/50 bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg shadow-xl w-full max-w-md">
         <div className="flex justify-between items-center border-b p-4">
-          <h3 className="text-lg font-semibold">Add New Task</h3>
+          <h3 className="text-lg font-semibold">Edit Task</h3>
           <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
             <FiX size={20} />
           </button>
         </div>
 
         <form onSubmit={handleSubmit} className="p-4 space-y-4">
+          {/* Title */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Title*</label>
             <input
@@ -61,6 +65,7 @@ const AddTaskModal = ({ isOpen, onClose, onAddTask }) => {
             />
           </div>
 
+          {/* Description */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
             <textarea
@@ -72,6 +77,7 @@ const AddTaskModal = ({ isOpen, onClose, onAddTask }) => {
             />
           </div>
 
+          {/* Status and Priority */}
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Status*</label>
@@ -104,6 +110,7 @@ const AddTaskModal = ({ isOpen, onClose, onAddTask }) => {
             </div>
           </div>
 
+          {/* Due Date */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Due Date*</label>
             <div className="relative">
@@ -120,6 +127,7 @@ const AddTaskModal = ({ isOpen, onClose, onAddTask }) => {
             </div>
           </div>
 
+          {/* Buttons */}
           <div className="flex justify-end space-x-3 pt-4 border-t">
             <button
               type="button"
@@ -130,9 +138,9 @@ const AddTaskModal = ({ isOpen, onClose, onAddTask }) => {
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 flex items-center"
+              className="px-4 py-2 bg-yellow-600 text-white rounded-md hover:bg-yellow-700 flex items-center"
             >
-              <FiPlus className="mr-2" /> Add Task
+              <FiEdit3 className="mr-2" /> Update Task
             </button>
           </div>
         </form>
@@ -141,4 +149,4 @@ const AddTaskModal = ({ isOpen, onClose, onAddTask }) => {
   );
 };
 
-export default AddTaskModal;
+export default EditTaskModal;

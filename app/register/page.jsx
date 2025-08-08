@@ -1,10 +1,13 @@
 "use client"
 import React, { useState } from 'react'
 import { registerUser } from '../_api/service';
+import { useRouter } from 'next/navigation';
 
 export default function Register() {
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
+
+    const router = useRouter()
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
@@ -12,6 +15,7 @@ export default function Register() {
             console.log(response);
             setEmail("")
             setUsername("")
+            router.push("/login")
         } catch (error) {
             console.log(error);
         }

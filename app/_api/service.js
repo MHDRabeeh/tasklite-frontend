@@ -43,6 +43,8 @@ export async function loginUser(userData) {
 }
 
 export async function getTodo(id) {
+  console.log(id);
+
   try {
     const { data } = await axiosInstance.get(`/todo/${id}`);
     console.log(data);
@@ -56,7 +58,53 @@ export async function addTodo(userData) {
   try {
     const { data } = await axiosInstance.post("/todo", userData);
     console.log(data);
+    if (data.success) {
+      toast.success(data.message || "added successfully!");
+    } else {
+      toast.error(data.message || "Something went wrong");
+    }
     return data;
+
+  } catch (error) {
+    console.log(error);
+  }
+}
+export async function updateStatus(id, newStatus) {
+  try {
+    const { data } = await axiosInstance.patch(`/todo/${id}`, {
+      status: newStatus,
+    });
+    if (data.success) {
+      toast.success(data.message || "status updated successfully!");
+    } else {
+      toast.error(data.message || "Something went wrong");
+    }
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+export async function editTodo(id, editingData) {
+  try {
+    const { data } = await axiosInstance.put(`/todo/${id}`, editingData);
+    if (data.success) {
+      toast.success(data.message || " updated successfully!");
+    } else {
+      toast.error(data.message || "Something went wrong");
+    }
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+export async function deleteTask(id) {
+  try {
+    const {data} = await axiosInstance.delete(`/todo/${id}`)
+    if (data.success) {
+      toast.success(data.message || " deleted  successfully!");
+    } else {
+      toast.error(data.message || "Something went wrong");
+    }
   } catch (error) {
     console.log(error);
   }

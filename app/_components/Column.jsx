@@ -9,7 +9,7 @@ const statusColors = {
   Completed: 'bg-green-100 border-green-400'
 };
 
-export default function Column({ colum, tasks }) {
+export default function Column({ colum, tasks ,handleEditClick,fetchdata}) {
   const {setNodeRef} = useDroppable({
     id:colum.id
   })
@@ -34,7 +34,7 @@ export default function Column({ colum, tasks }) {
       </div>
       <div className='space-y-3'>
         {tasks.map((task) => (
-          <Task key={task._id} task={task} />
+          <Task fetchdata={fetchdata} key={task._id} task={task} handleEditClick={handleEditClick}/>
         ))}
       </div>
     </div>

@@ -1,18 +1,23 @@
 "use client"
 import React, { useState } from 'react'
 import { loginUser } from '../_api/service'
+import { useRouter } from 'next/navigation'
 
 function Login() {
     const [email, setEmail] = useState('')
-
+    const router = useRouter()
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
             const res = await loginUser({ email })
+            console.log(res);
+            
             const userId = res?.user._id
+            const username = res?.user.username || ""
             setEmail("")
             localStorage.setItem("userId", userId);
-
+            localStorage.setItem("username",username)
+           router.push("/todo")
         } catch (error) {
 
             console.log(error);
